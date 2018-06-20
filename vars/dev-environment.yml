@@ -16,7 +16,7 @@ ec2_instances:
     image: "{{ image_id }}"
     assign_public_ip: true
     keypair: "{{instances_keypair}}"
-    group: ['default']
+    group: default
     instance_tags: 
         Name: dev_jumphost
     exact_count: 1
@@ -26,7 +26,7 @@ ec2_instances:
   - instance_type: m1.small
     image: "{{ image_id }}"
     keypair: "{{instances_keypair}}"
-    group: ['default'] 
+    group: default
     instance_tags: 
         Name: web
     exact_count: 1 
