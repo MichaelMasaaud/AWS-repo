@@ -2,7 +2,7 @@
 # set these parameters to control the region, keypair, and AMI that are launched
 ec2_region: us-west-1
 instances_keypair: Ansible 
-image_id: ami-bf5021d6
+image_id: ami-9887c6e7
 
 # security groups to be created
 security_groups:
