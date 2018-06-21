@@ -82,9 +82,6 @@
 - name: Config Repos File
   hosts: Cluster
   remote_user: ec2-user
-  vars:
-    - ansible_ssh_private_key_file: "./london.pem"
-    - host_key_checking: False
   tasks:
   - template:
       src: repos.j2
