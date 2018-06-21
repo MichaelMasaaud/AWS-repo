@@ -12,7 +12,7 @@
 
   - name: Launch Master Node
     ec2: 
-      region: us-east-1
+      region: eu-west-1
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       image: ami-7c491f05
@@ -27,7 +27,7 @@
       
   - name: Launch Infra Node
     ec2: 
-      region: us-east-1
+      region: eu-west-1
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       image: ami-7c491f05
@@ -42,7 +42,7 @@
       
   - name: Launch Worker Nodes
     ec2: 
-      region: us-east-1
+      region: eu-west-1
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       image: ami-7c491f05
