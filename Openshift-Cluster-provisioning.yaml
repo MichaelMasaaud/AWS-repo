@@ -95,7 +95,7 @@
       count: "{{ instances | length }}"
       vpc_subnet_id: "{{ deployment_vars[deployment_type].vpc_subnet }}"
       assign_public_ip: "{{ deployment_vars[deployment_type].assign_public_ip }}"
-      user_data: "{{ lookup('template', '../templates/user_data.j2') }}"
+      user_data: "{{ lookup('template', '/user_data.j2') }}"
       wait: yes
       instance_tags:
         created-by: "{{ created_by }}"
