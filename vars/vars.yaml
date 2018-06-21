@@ -3,7 +3,7 @@ debug_level: 2
 
 deployment_rhel7_ent_base:
   # rhel-7.1, requires cloud access subscription
-  image: "{{ lookup('oo_option', 'ec2_image') | default('ami-10251c7a', True) }}"
+  image: "{{ lookup('oo_option', 'ec2_image') | default('ami-14c5486b', True) }}"
   image_name: "{{ lookup('oo_option', 'ec2_image_name') | default(None, True) }}"
   region: "{{ lookup('oo_option', 'ec2_region') | default('us-east-1', True) }}"
   ssh_user: ec2-user
