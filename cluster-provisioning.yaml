@@ -65,8 +65,8 @@
     wait_for:
        host: "{{ item.public_dns_name }}"
        port: 22
-       delay: 240
-       timeout: 300
+       delay: 120
+       timeout: 200
        state: started
     with_items: "{{ worker.instances }}"
     
@@ -81,12 +81,16 @@
   
 - name: Config Repos File
   hosts: Cluster
-  become: true
   gather_facts: yes
   tasks:
   - template:
       src: repos.j2
       dest: /etc/yum.repos.d/openshift.repo
+      owner: root
+      group: root
+      mode:0644
+      
+      
       
         
       
