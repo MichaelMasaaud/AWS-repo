@@ -6,8 +6,7 @@
   vars_files:
       - vars/aws-creds.yml
       - vars/vars.yaml
-  tasks:
-  - set_fact:
+  set_fact:
     created_by: "{{ lookup('env', 'LOGNAME')|default(cluster, true) }}"
     docker_vol_ephemeral: "{{ lookup('env', 'os_docker_vol_ephemeral') | default(false, true) }}"
     cluster: "{{ cluster_id }}"
@@ -15,10 +14,10 @@
     host_type: "{{ type }}"
     sub_host_type: "{{ g_sub_host_type }}"
 
-  - set_fact:
+  set_fact:
       ec2_instance_type: "{{ lookup('env', 'ec2_master_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
       ec2_security_groups: "{{ lookup('env', 'ec2_master_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
-    when: host_type == "master" and sub_host_type == "default"
+  when: host_type == "master" and sub_host_type == "default"
 
   - set_fact:
       ec2_instance_type: "{{ lookup('env', 'ec2_etcd_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
@@ -81,7 +80,7 @@
 
   - set_fact:
       volumes: "{{ volume_defs | oo_ec2_volume_definition(host_type, docker_vol_ephemeral | bool) }}"
-
+  tasks:
   - name: Launch instance(s)
     ec2:
       ec2_access_key: "{{ ec2_access_key }}"
