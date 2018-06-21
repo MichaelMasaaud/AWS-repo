@@ -63,12 +63,10 @@
      
   - name: Add New Instances to host group
     add_host:
-      host_name: "{{ item.ec2_public_ip }}"
+      host_name: "{{ item.public_ip }}"
       groupname: OS-Cluster
     with_items:
      - "{{ master.instances }}"
-     - "{{ infra.instances }}"
-     - "{{ worker.instances }}"
      
   
     
