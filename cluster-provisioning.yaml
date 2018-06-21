@@ -78,3 +78,20 @@
       - "{{ master.instances }}"
       - "{{ infra.instances }}"
       - "{{ worker.instances }}"
+      
+  - name: editing in hosts file
+    hosts: CLuster
+    become: yes
+    gather_facts: yes
+    task:
+    - lineinfile:
+             path: /etc/hosts
+             line: '"{{ item.public_dns_name }}" 
+      with_items:
+       - "{{ master.instances }}"
+       - "{{ infra.instances }}"
+       - "{{ worker.instances }}"
+      
+        
+      
+      
