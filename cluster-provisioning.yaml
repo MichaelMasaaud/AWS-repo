@@ -16,7 +16,7 @@
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       keypair: Ansible
-      image: ami-14c5486b
+      image: ami-922914f7
       instance_type: m1.small
       group: "default"
       wait: true
@@ -32,7 +32,7 @@
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       keypair: Ansible
-      image: ami-14c5486b
+      image: ami-922914f7
       instance_type: m1.small
       group: "default"
       wait: true
@@ -48,7 +48,7 @@
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       keypair: Ansible
-      image: ami-14c5486b
+      image: ami-922914f7
       instance_type: m1.small
       group: "default"
       wait: true
