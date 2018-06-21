@@ -67,6 +67,7 @@
       groupname: OS-Cluster
     with_items:
      - "{{ master.instances }}"
+ 
   - name: Add New Instances to host group
     add_host:
       host_name: "{{ item.public_ip }}"
@@ -77,7 +78,7 @@
   - name: Add New Instances to host group
     add_host:
       host_name: "{{ item.public_ip }}"
-      groupname: OS-Cluster
+      groupname: Test
     with_items:
      - "{{ worker.instances }}"
      
@@ -89,6 +90,3 @@
        timeout: 100
        state: started
     with_items: "{{ worker.instances }}"
-  
-    
-      
