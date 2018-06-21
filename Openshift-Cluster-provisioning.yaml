@@ -111,6 +111,6 @@
     with_together:
       - "{{ instances }}"
       - "{{ ec2.instances }}"
-  args:
-    tags:
-      Name: "{{ item.0 }}"
+    args:
+     tags:
+       Name: "{{ item.0 }}"
