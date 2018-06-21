@@ -19,39 +19,39 @@
       ec2_security_groups: "{{ lookup('env', 'ec2_master_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
   when: host_type == "master" and sub_host_type == "default"
 
-  - set_fact:
+  set_fact:
       ec2_instance_type: "{{ lookup('env', 'ec2_etcd_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
       ec2_security_groups: "{{ lookup('env', 'ec2_etcd_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
-    when: host_type == "etcd" and sub_host_type == "default"
+  when: host_type == "etcd" and sub_host_type == "default"
 
-  - set_fact:
+  set_fact:
       ec2_instance_type: "{{ lookup('env', 'ec2_infra_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
       ec2_security_groups: "{{ lookup('env', 'ec2_infra_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
-    when: host_type == "node" and sub_host_type == "infra"
+  when: host_type == "node" and sub_host_type == "infra"
 
-  - set_fact:
+  set_fact:
       ec2_instance_type: "{{ lookup('env', 'ec2_node_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
       ec2_security_groups: "{{ lookup('env', 'ec2_node_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
-    when: host_type == "node" and sub_host_type == "compute"
+  when: host_type == "node" and sub_host_type == "compute"
 
-  - set_fact:
+  set_fact:
       ec2_instance_type: "{{ deployment_vars[deployment_type].type }}"
-    when: ec2_instance_type is not defined
-  - set_fact:
+  when: ec2_instance_type is not defined
+  set_fact:
       ec2_security_groups: "{{ deployment_vars[deployment_type].security_groups }}"
-    when: ec2_security_groups is not defined
+  when: ec2_security_groups is not defined
 
-  - name: Find amis for deployment_type
-    ec2_ami_find:
+  name: Find amis for deployment_type
+  ec2_ami_find:
       region: "{{ deployment_vars[deployment_type].region }}"
       ami_id: "{{ deployment_vars[deployment_type].image }}"
       name: "{{ deployment_vars[deployment_type].image_name }}"
-    register: ami_result
+  register: ami_result
 
-  - fail: msg="Could not find requested ami"
-    when: not ami_result.results
+  fail: msg="Could not find requested ami"
+  when: not ami_result.results
 
-  - set_fact:
+  set_fact:
        latest_ami: "{{ ami_result.results | oo_ami_selector(deployment_vars[deployment_type].image_name) }}"
        volume_defs:
          etcd:
@@ -78,7 +78,7 @@
               device_type: "{{ lookup('env', 'os_docker_vol_type') | default('gp2', true) }}"
               iops: "{{ lookup('env', 'os_docker_vol_iops') | default(500, true) }}"
 
-  - set_fact:
+  set_fact:
       volumes: "{{ volume_defs | oo_ec2_volume_definition(host_type, docker_vol_ephemeral | bool) }}"
   tasks:
   - name: Launch instance(s)
