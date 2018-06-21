@@ -65,7 +65,16 @@
     wait_for:
        host: "{{ item.public_dns_name }}"
        port: 22
-       delay: 300
-       timeout: 400
+       delay: 240
+       timeout: 100
        state: started
     with_items: "{{ worker.instances }}"
+    
+  - name: add host to host group
+    add_host:
+       hostname: "{{ item.public_dns_name }}"
+       groups: Cluster
+    with_items:
+      - "{{ master.instances }}"
+      - "{{ infra.instances }}"
+      - "{{ worker.instances }}"
