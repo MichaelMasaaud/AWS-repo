@@ -5,6 +5,7 @@
   gather_facts: False
   vars_files:
       - vars/aws-creds.yml
+      - vars/vars.yaml
   tasks:
   - set_fact:
     created_by: "{{ lookup('env', 'LOGNAME')|default(cluster, true) }}"
