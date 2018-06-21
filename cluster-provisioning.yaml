@@ -16,7 +16,7 @@
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       image: ami-7c491f05
-      instance_type: m1.small
+      instance_type: t2.micro
       group: "default"
       wait: true
       instance_tags:
@@ -31,7 +31,7 @@
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       image: ami-7c491f05
-      instance_type: m1.small
+      instance_type: t2.micro
       group: "default"
       wait: true
       instance_tags:
@@ -46,7 +46,7 @@
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
       image: ami-7c491f05
-      instance_type: m1.small
+      instance_type: t2.micro
       group: "default"
       wait: true
       instance_tags:
