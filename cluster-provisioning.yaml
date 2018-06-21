@@ -65,8 +65,7 @@
     add_host:
       host_name: "{{ item.public_dns_name }}"
       groupname: cluster
-    with_items:
-     - "{{ worker }}"
+    with_items: "{{ worker.instances }}"
      
   - name: Wait for SSH to come up
     wait_for:
