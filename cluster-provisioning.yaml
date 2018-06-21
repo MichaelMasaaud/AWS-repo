@@ -65,7 +65,7 @@
     wait_for:
        host: "{{ item.public_dns_name }}"
        port: 22
-       delay: 350
-       timeout: 100
+       delay: 300
+       timeout: 400
        state: started
     with_items: "{{ worker.instances }}"
