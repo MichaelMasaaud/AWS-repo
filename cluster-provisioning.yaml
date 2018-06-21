@@ -63,22 +63,8 @@
      
   - name: Add New Instances to host group
     add_host:
-      host_name: "{{ item.public_ip }}"
-      groupname: OS-Cluster
-    with_items:
-     - "{{ master.instances }}"
- 
-  - name: Add New Instances to host group
-    add_host:
-      host_name: "{{ item.public_ip }}"
-      groupname: OS-Cluster
-    with_items:
-     - "{{ infra.instances }}"
-     
-  - name: Add New Instances to host group
-    add_host:
-      host_name: "{{ item.public_ip }}"
-      groupname: Test
+      host_name: "{{ item.public_dns_name }}"
+      groupname: cluster
     with_items:
      - "{{ worker.instances }}"
      
