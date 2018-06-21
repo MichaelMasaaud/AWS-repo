@@ -81,13 +81,11 @@
   
 - name: Config Repos File
   hosts: Cluster
+  become: ec2-user
   tasks:
   - template:
       src: repos.j2
       dest: /etc/yum.repos.d/openshift.repo
-      owner: root
-      group: root
-      mode: 0644
       
       
       
