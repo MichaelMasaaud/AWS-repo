@@ -78,19 +78,15 @@
       - "{{ master.instances }}"
       - "{{ infra.instances }}"
       - "{{ worker.instances }}"
-      
-- name: editing in hosts file
-  hosts: CLuster
-  become: yes
+  
+- name: Config Repos File
+  hosts: Cluster
+  become: true
   gather_facts: yes
-  task:
-  - lineinfile:
-       path: /etc/hosts
-       line: '"{{ item.public_dns_name }}" 
-    with_items:
-      - "{{ master.instances }}"
-       - "{{ infra.instances }}"
-       - "{{ worker.instances }}"
+  tasks:
+  - template:
+      src: repos.j2
+      dest: /etc/yum.repos.d/openshift.repo
       
         
       
