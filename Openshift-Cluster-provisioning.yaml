@@ -105,12 +105,3 @@
         sub-host-type: "{{ sub_host_type }}"
       volumes: "{{ volumes }}"
   register: ec2
-
-  - name: Add Name tag to instances
-    ec2_tag: resource={{ item.1.id }} region={{ deployment_vars[deployment_type].region }} state=present
-    with_together:
-    - "{{ instances }}"
-    - "{{ ec2.instances }}"
-    args:
-      tags:
-        Name: "{{ item.0 }}"
