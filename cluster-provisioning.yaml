@@ -18,7 +18,7 @@
       keypair: Ansible
       image: ami-14c5486b
       instance_type: m1.small
-      group: "CentOS 7 -x86_64-- with Updates HVM-1805_01-AutogenByAWSMP-"
+      group: "CentOS 7 -x86_64- - with Updates HVM-1805_01-AutogenByAWSMP-"
       wait: true
       instance_tags:
           Name: Master_Node
@@ -34,7 +34,7 @@
       keypair: Ansible
       image: ami-14c5486b
       instance_type: m1.small
-      group: "CentOS 7 -x86_64-- with Updates HVM-1805_01-AutogenByAWSMP-"
+      group: "CentOS 7 -x86_64- - with Updates HVM-1805_01-AutogenByAWSMP-"
       wait: true
       instance_tags:
           Name: Infra_Node
@@ -50,7 +50,7 @@
       keypair: Ansible
       image: ami-14c5486b
       instance_type: m1.small
-      group: "CentOS 7 -x86_64-- with Updates HVM-1805_01-AutogenByAWSMP-"
+      group: "CentOS 7 -x86_64- - with Updates HVM-1805_01-AutogenByAWSMP-"
       wait: true
       instance_tags:
           Name: Worker_Node
