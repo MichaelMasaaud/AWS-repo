@@ -61,12 +61,6 @@
       exact_count: "{{num_workers}}"
     register: worker
      
-  - name: Add New Instances to host group
-    add_host:
-      host_name: "{{ item.public_dns_name }}"
-      groupname: cluster
-    with_items: "{{ worker.instances }}"
-     
   - name: Wait for SSH to come up
     wait_for:
        host: "{{ item.public_dns_name }}"
