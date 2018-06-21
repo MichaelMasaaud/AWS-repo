@@ -60,18 +60,6 @@
         Name: worker_node
       exact_count: "{{num_workers}}"
     register: worker
-    
-  - name: Wait for SSH to come up
-    wait_for:
-        host: "{{ item.ec2_public_dns_name }}"
-        port: 22
-        delay: 300
-        timeout: 320
-        state: started
-    with_items:
-     - "{{ master.instances }}"
-     - "{{ infra.instances }}"
-     - "{{ worker.instances }}"
      
   - name: Add New Instances to host group
     add_host:
