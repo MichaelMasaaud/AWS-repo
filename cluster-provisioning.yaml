@@ -2,6 +2,7 @@
 - name: Provision ec2 instances for Opneshift Cluster
   hosts: localhost
   connection: local
+  become: yes
   gather_facts: False
 
   vars_files:
