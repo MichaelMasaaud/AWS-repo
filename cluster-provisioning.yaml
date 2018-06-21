@@ -81,7 +81,6 @@
   
 - name: Config Repos File
   hosts: Cluster
-  gather_facts: yes
   tasks:
   - template:
       src: repos.j2
