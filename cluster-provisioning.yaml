@@ -15,7 +15,6 @@
       region: us-east-2
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
-      keypair: Ansible
       image: ami-922914f7
       instance_type: m1.small
       group: "default"
@@ -31,7 +30,6 @@
       region: us-east-2
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
-      keypair: Ansible
       image: ami-922914f7
       instance_type: m1.small
       group: "default"
@@ -47,7 +45,6 @@
       region: us-east-2
       ec2_access_key: "{{ ec2_access_key }}"
       ec2_secret_key: "{{ ec2_secret_key }}"
-      keypair: Ansible
       image: ami-922914f7
       instance_type: m1.small
       group: "default"
