@@ -1,0 +1,113 @@
+---
+- name: Provision Openshift Cluster instances based on AWS environment
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars_files:
+      - vars/aws-creds.yml
+  tasks:
+  - set_fact:
+    created_by: "{{ lookup('env', 'LOGNAME')|default(cluster, true) }}"
+    docker_vol_ephemeral: "{{ lookup('env', 'os_docker_vol_ephemeral') | default(false, true) }}"
+    cluster: "{{ cluster_id }}"
+    env: "{{ cluster_env }}"
+    host_type: "{{ type }}"
+    sub_host_type: "{{ g_sub_host_type }}"
+
+  - set_fact:
+    ec2_instance_type: "{{ lookup('env', 'ec2_master_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
+    ec2_security_groups: "{{ lookup('env', 'ec2_master_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
+  when: host_type == "master" and sub_host_type == "default"
+
+  - set_fact:
+    ec2_instance_type: "{{ lookup('env', 'ec2_etcd_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
+    ec2_security_groups: "{{ lookup('env', 'ec2_etcd_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
+  when: host_type == "etcd" and sub_host_type == "default"
+
+  - set_fact:
+    ec2_instance_type: "{{ lookup('env', 'ec2_infra_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
+    ec2_security_groups: "{{ lookup('env', 'ec2_infra_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
+  when: host_type == "node" and sub_host_type == "infra"
+
+  - set_fact:
+    ec2_instance_type: "{{ lookup('env', 'ec2_node_instance_type') | default(deployment_vars[deployment_type].type, true) }}"
+    ec2_security_groups: "{{ lookup('env', 'ec2_node_security_groups') | default(deployment_vars[deployment_type].security_groups, true) }}"
+  when: host_type == "node" and sub_host_type == "compute"
+
+  - set_fact:
+    ec2_instance_type: "{{ deployment_vars[deployment_type].type }}"
+  when: ec2_instance_type is not defined
+  - set_fact:
+    ec2_security_groups: "{{ deployment_vars[deployment_type].security_groups }}"
+  when: ec2_security_groups is not defined
+
+  - name: Find amis for deployment_type
+  ec2_ami_find:
+    region: "{{ deployment_vars[deployment_type].region }}"
+    ami_id: "{{ deployment_vars[deployment_type].image }}"
+    name: "{{ deployment_vars[deployment_type].image_name }}"
+  register: ami_result
+
+  - fail: msg="Could not find requested ami"
+  when: not ami_result.results
+
+  - set_fact:
+       latest_ami: "{{ ami_result.results | oo_ami_selector(deployment_vars[deployment_type].image_name) }}"
+       volume_defs:
+         etcd:
+           root:
+             volume_size: "{{ lookup('env', 'os_etcd_root_vol_size') | default(25, true) }}"
+             device_type: "{{ lookup('env', 'os_etcd_root_vol_type') | default('gp2', true) }}"
+             iops: "{{ lookup('env', 'os_etcd_root_vol_iops') | default(500, true) }}"
+         master:
+           root:
+             volume_size: "{{ lookup('env', 'os_master_root_vol_size') | default(25, true) }}"
+             device_type: "{{ lookup('env', 'os_master_root_vol_type') | default('gp2', true) }}"
+             iops: "{{ lookup('env', 'os_master_root_vol_iops') | default(500, true) }}"
+           docker:
+             volume_size: "{{ lookup('env', 'os_docker_vol_size') | default(10, true) }}"
+             device_type: "{{ lookup('env', 'os_docker_vol_type') | default('gp2', true) }}"
+             iops: "{{ lookup('env', 'os_docker_vol_iops') | default(500, true) }}"
+         node:
+           root:
+              volume_size: "{{ lookup('env', 'os_node_root_vol_size') | default(85, true) }}"
+              device_type: "{{ lookup('env', 'os_node_root_vol_type') | default('gp2', true) }}"
+              iops: "{{ lookup('env', 'os_node_root_vol_iops') | default(500, true) }}"
+           docker:
+              volume_size: "{{ lookup('env', 'os_docker_vol_size') | default(32, true) }}"
+              device_type: "{{ lookup('env', 'os_docker_vol_type') | default('gp2', true) }}"
+              iops: "{{ lookup('env', 'os_docker_vol_iops') | default(500, true) }}"
+
+  - set_fact:
+      volumes: "{{ volume_defs | oo_ec2_volume_definition(host_type, docker_vol_ephemeral | bool) }}"
+
+  - name: Launch instance(s)
+    ec2:
+      state: present
+      region: "{{ deployment_vars[deployment_type].region }}"
+      keypair: "{{ deployment_vars[deployment_type].keypair }}"
+      group: "{{ deployment_vars[deployment_type].security_groups }}"
+      instance_type: "{{ ec2_instance_type }}"
+      image: "{{ deployment_vars[deployment_type].image }}"
+      count: "{{ instances | length }}"
+      vpc_subnet_id: "{{ deployment_vars[deployment_type].vpc_subnet }}"
+      assign_public_ip: "{{ deployment_vars[deployment_type].assign_public_ip }}"
+      user_data: "{{ lookup('template', '../templates/user_data.j2') }}"
+      wait: yes
+      instance_tags:
+        created-by: "{{ created_by }}"
+        clusterid: "{{ cluster }}"
+        environment: "{{ cluster_env }}"
+        host-type: "{{ host_type }}"
+        sub-host-type: "{{ sub_host_type }}"
+      volumes: "{{ volumes }}"
+  register: ec2
+
+  - name: Add Name tag to instances
+    ec2_tag: resource={{ item.1.id }} region={{ deployment_vars[deployment_type].region }} state=present
+    with_together:
+      - "{{ instances }}"
+      - "{{ ec2.instances }}"
+  args:
+    tags:
+      Name: "{{ item.0 }}"
