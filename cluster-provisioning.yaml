@@ -81,6 +81,7 @@
   
 - name: Config Repos File
   hosts: Cluster
+  become: yes
   vars:
    ansible_ssh_private_key_file: "./london.pem"
    ansible_ssh_user: ec2-user
