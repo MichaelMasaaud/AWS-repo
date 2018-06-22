@@ -78,12 +78,19 @@
       - "{{ master.instances }}"
       - "{{ infra.instances }}"
       - "{{ worker.instances }}"
-  - name: add host to host group
+  - name: add host to host group ( Worker 1 ) 
     add_host:
        hostname: "{{ item.public_dns_name }}"
-       groups: master1
+       groups: worker1
     with_items:
-      - "{{ master.instances }}"
+      - "{{ worker.instances }}"
+      
+  - name: add host to host group ( Infra 1 )
+    add_host:
+       hostname: "{{ item.public_dns_name }}"
+       groups: infra1
+    with_items:
+      - "{{ infra.instances }}"
    
 - name: Config Repos File
   hosts: Cluster
@@ -126,6 +133,19 @@
       docker-storage-setup
       systemctl enable docker
       systemctl start docker
+- name: Pull Docker Images for Worker Nodes
+  hosts: worker1
+  become: yes
+  vars:
+    ansible_ssh_private_key_file: "./london.pem"
+    ansible_ssh_user: ec2-user
+  tasks:
+  - shell: |
+       REGISTRY="registry.access.redhat.com";PTH="openshift3"
+   
+      
+      
+      
       
     
     
