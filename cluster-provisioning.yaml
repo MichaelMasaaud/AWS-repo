@@ -78,7 +78,13 @@
       - "{{ master.instances }}"
       - "{{ infra.instances }}"
       - "{{ worker.instances }}"
-  
+  - name: add host to host group
+    add_host:
+       hostname: "{{ item.public_dns_name }}"
+       groups: master1
+    with_items:
+      - "{{ master.instances }}"
+   
 - name: Config Repos File
   hosts: Cluster
   become: yes
@@ -86,9 +92,36 @@
    ansible_ssh_private_key_file: "./london.pem"
    ansible_ssh_user: ec2-user
   tasks:
-  - template:
+  - name : Copy Repo Files  
+    template:
       src: repos.j2
-      dest: /etc/yum.repos.d/openshift.repo
+      dest: /etc/yum.repos.d/openshift.repo    
+  - name: Disable old Repos and update with new ones ( That might take few minutes )
+    shell: |
+       mv /etc/yum.repos.d/redhat.{repo,disabled}
+       yum clean all
+       yum -y update
+  - name: Installing Packages
+    yum:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+     - NetworkManager
+     - bash-completion
+     - docker
+  - name: Configure Docker Storage
+    service:
+       name: docker
+       state: stopped
+       enabled: yes
+  - shell: rm -rf /var/lib/docker/*
+  
+       
+       
+     
+     
+  
+    
       
       
       
