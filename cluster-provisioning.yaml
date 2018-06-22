@@ -141,9 +141,33 @@
     ansible_ssh_user: ec2-user
   tasks:
   - shell: |
-       REGISTRY="registry.access.redhat.com";PTH="openshift3"
-   
-      
+       REGISTRY="registry.access.redhat.com"
+       PTH="openshift3"
+       OSE_VERSION=$(yum info atomic-openshift | grep Version | awk '{print $3}')
+       docker pull $REGISTRY/$PTH/ose-deployer:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ose-sti-builder:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ose-pod:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ose-keepalived-ipfailover:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ruby-20-rhel7
+       docker pull $REGISTRY/$PTH/mysql-55-rhel7
+       docker pull openshift/hello-openshift:v1.2.1
+       
+- name: Pull Docker Images for Worker Nodes
+  hosts: infra1
+  become: yes
+  vars:
+    ansible_ssh_private_key_file: "./london.pem"
+    ansible_ssh_user: ec2-user
+  tasks:
+  - shell: |
+       REGISTRY="registry.access.redhat.com"
+       PTH="openshift3"
+       OSE_VERSION=$(yum info atomic-openshift | grep Version | awk '{print $3}')
+       docker pull $REGISTRY/$PTH/ose-haproxy-router:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ose-deployer:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ose-pod:v$OSE_VERSION
+       docker pull $REGISTRY/$PTH/ose-docker-registry:v$OSE_VERSION
+       
       
       
       
