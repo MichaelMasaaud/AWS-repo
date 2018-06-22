@@ -105,8 +105,8 @@
       dest: /etc/yum.repos.d/openshift.repo    
   - name: Disable old Repos and update with new ones ( That might take few minutes )
     shell: |
-       mv /etc/yum.repos.d/redhat.{repo,disabled}
-       yum clean all
+      yum clean all
+      yum -y update
   - name: Installing Packages
     yum:
       name: "{{ item }}"
