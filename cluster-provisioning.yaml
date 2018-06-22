@@ -107,7 +107,6 @@
     shell: |
        mv /etc/yum.repos.d/redhat.{repo,disabled}
        yum clean all
-       yum -y update
   - name: Installing Packages
     yum:
       name: "{{ item }}"
