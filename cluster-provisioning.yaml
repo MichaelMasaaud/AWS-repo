@@ -152,7 +152,7 @@
        docker pull $REGISTRY/$PTH/mysql-55-rhel7
        docker pull openshift/hello-openshift:v1.2.1
        
-- name: Pull Docker Images for Worker Nodes
+- name: Pull Docker Images for Infra Nodes
   hosts: infra1
   become: yes
   vars:
