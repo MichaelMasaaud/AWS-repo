@@ -109,14 +109,26 @@
      - NetworkManager
      - bash-completion
      - docker
-  - name: Configure Docker Storage
+  - name: Configure Docker 
     service:
        name: docker
        state: stopped
        enabled: yes
-  - shell: rm -rf /var/lib/docker/*
-  
-       
+  - name: 
+    shell: rm -rf /var/lib/docker/*
+
+  - name: 
+    template:
+        src: docker-storage.j2
+        dest: /etc/sysconfig/docker-storage-setup
+  - name: 
+    shell: |
+      docker-storage-setup
+      systemctl enable docker
+      systemctl start docker
+      
+    
+    
        
      
      
