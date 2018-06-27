@@ -3,6 +3,7 @@
   gather_facts: false
   remote_user: root
   become_method: su
+   password: "!QAZxsw2"
   
   tasks:
   - name: restart service
