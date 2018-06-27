@@ -5,4 +5,4 @@
   
   tasks:
   - name: testing local server
-    shell: hostname
+    debug:"msg= The server name is {{ansible_nodename}}"
