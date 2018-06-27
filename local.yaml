@@ -4,7 +4,4 @@
   
   tasks:
   - name: restart service
-    service:
-        name: network
-        state: restarted
-        enabled: yes  
+    shell: systemctl restart network
