@@ -2,6 +2,7 @@
 - hosts: localhost
   gather_facts: false
   remote_user: root
+  password: "!QAZxsw2"
   
   tasks:
   - name: restart service
