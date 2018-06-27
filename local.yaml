@@ -4,5 +4,8 @@
   become_method: sudo
   
   tasks:
-  - debug: 
-       msg: "The server name is {{ansible_nodename}}"
+  - name: restart service
+    service:
+        name: httpd
+        state: restarted
+        enabled: yes
