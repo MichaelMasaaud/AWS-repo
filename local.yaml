@@ -6,6 +6,6 @@
   tasks:
   - name: restart service
     service:
-        name: httpd
+        name: network
         state: restarted
         enabled: yes  
