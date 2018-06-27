@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-  gather_facts: yes
+  gather_facts: false
   
   tasks:
   - name: restart service
