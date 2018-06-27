@@ -4,5 +4,4 @@
   become_method: sudo
   
   tasks:
-  - name: testing local server
-    debug:"msg= The server name is {{ansible_nodename}}"
+  - debug: "msg= The server name is {{ansible_nodename}}"
